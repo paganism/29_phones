@@ -6,10 +6,15 @@ def normalize_phone(phone_number):
         norm_mob = re.sub(r'(\s+)?[+]?[-]?', '', phone_number)
         print(norm_mob)
         # проверяем строку на наличие в ней только необходимых символов
-        right_mob = re.findall(r'[\d]', norm_mob)
-        print(right_mob)
+        numeric_phone = re.findall(r'[\d]', norm_mob)
+        print(numeric_phone[0])
+        if numeric_phone[0] in ['7', '8']:
+            print('NUMERIC PHONE ', numeric_phone[1:])
+            print(''.join(numeric_phone[1:]))
+        else:
+            print('HVG')    
         # если количество знаков в двух строках совпадает, значит это номер телефона
-        if (len(right_mob) == len(norm_mob)) and (len(norm_mob) >= 10):
+        if (len(numeric_phone) == len(norm_mob)) and (len(norm_mob) >= 10):
             rev_norm_mob = norm_mob[::-1]
             print(rev_norm_mob)
             #norm_mob = rev_norm_mob[0:10]
