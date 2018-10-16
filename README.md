@@ -1,6 +1,6 @@
 # Microservice for Search Index of Phone Numbers
 
-This service checks table for new phone numbers and normalizes it to "9291112233" format. In config.py you can set timeout between checkouts. Normalized phone numbers inserts into Orders.normalized_phone_number column.
+This service checks table for new phone numbers and normalizes it to "9291112233" format. In config you can set timeout between checkouts. Normalized phone numbers inserts into Orders.normalized_phone_number column.
 
 # How to run
 
