@@ -1,5 +1,15 @@
 import re
 import phonenumbers
+from flask import Flask
+from models import Orders, db
+from config import Config
+
+
+app = Flask(__name__)
+app.config.from_object(Config)
+
+
+db.init_app(app)
 
 
 def normalize_phone(raw_number):
@@ -12,6 +22,15 @@ def normalize_phone(raw_number):
         return raw_number
 
 
+def process_order_phones():
+    orders = Orders.query.filter_by(
+        Orders.normalized_phone_number.is_(None)
+    ).order_by(Orders.created.desc()).first()
+    normalized_number = normalize_phone(orders.contact_phone)
+    orders.contact_phone = normalized_number
+    db.session.commit()
+
+
+
 if __name__ == "__main__":
-    normalize_phone('8 929 111-22-33')
-    normalize_phone('+79291112266')
+    app.run()
