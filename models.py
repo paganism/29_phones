@@ -8,4 +8,3 @@ class Orders(db.Model):
     created = db.Column(db.DateTime, index=True)
     contact_phone = db.Column(db.String(100))
     normalized_phone_number = db.Column(db.String(20))
-

@@ -1,8 +1,10 @@
 import re
-import phonenumbers
+import phonenumbers 
 from flask import Flask
 from models import Orders, db
 from config import Config
+from flask_sqlalchemy import SQLAlchemy
+from time import sleep
 
 
 app = Flask(__name__)
@@ -13,24 +15,27 @@ db.init_app(app)
 
 
 def normalize_phone(raw_number):
-    norm_mob = re.sub(r'(\D+)', '', raw_number)
+    digit_number = re.sub(r'(\D+)', '', raw_number)[-10:]
     try:
-        parsed_number = phonenumbers.parse(norm_mob, 'RU')
-        if phonenumbers.is_valid_number(parsed_number):
-            return parsed_number.national_number
-    except NumberParseException:
-        return raw_number
+        parsed_number = phonenumbers.parse(digit_number, 'RU')
+        return parsed_number.national_number
+    except phonenumbers.phonenumberutil.NumberParseException:
+        return digit_number
 
 
 def process_order_phones():
-    orders = Orders.query.filter_by(
-        Orders.normalized_phone_number.is_(None)
-    ).order_by(Orders.created.desc()).first()
-    normalized_number = normalize_phone(orders.contact_phone)
-    orders.contact_phone = normalized_number
-    db.session.commit()
-
+    while True:
+        orders = Orders.query.filter(
+            Orders.normalized_phone_number.is_(None),
+            Orders.contact_phone.isnot(None)
+        ).order_by(Orders.created.asc()).first()
+        if orders:
+            normalized_number = normalize_phone(orders.contact_phone)
+            orders.normalized_phone_number = normalized_number
+        db.session.commit()
+        sleep(app.config['CHECK_NEW_ORDERS_TIMEOUT'])
 
 
 if __name__ == "__main__":
-    app.run()
+    with app.app_context():
+        process_order_phones()
