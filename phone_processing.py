@@ -5,7 +5,8 @@ from models import Orders, db
 from config import Config
 from flask_sqlalchemy import SQLAlchemy
 from time import sleep
-from sqlalchemy.exc import StatementError, OperationalError, InvalidRequestError
+from sqlalchemy.exc import StatementError, OperationalError,\
+    InvalidRequestError
 import logging
 from loggers import logger
 
@@ -41,9 +42,12 @@ def process_order_phones():
                     'orders.id=%s with phone %s processed to %s',
                     orders.id,
                     orders.contact_phone,
-                    orders.normalized_phone_number)
+                    orders.normalized_phone_number
+                )
             db.session.commit()
-        except (StatementError, OperationalError, InvalidRequestError) as sqlalchemy_exc:
+        except (StatementError,
+                OperationalError,
+                InvalidRequestError) as sqlalchemy_exc:
             db.session.rollback()
             logger.info('database connection problem, rollback')
         sleep(timeout_check)
