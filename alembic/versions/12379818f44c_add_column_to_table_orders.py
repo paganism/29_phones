@@ -11,13 +11,14 @@ import sqlalchemy as sa
 
 # revision identifiers, used by Alembic.
 revision = '12379818f44c'
-down_revision = '6298086f7f79'
+down_revision = None
 branch_labels = None
 depends_on = None
+normalized_phone_number_length = 100
 
 
 def upgrade():
-    op.add_column('orders', sa.Column('normalized_phone_number', sa.String(100)))
+    op.add_column('orders', sa.Column('normalized_phone_number', sa.String(normalized_phone_number_length)))
 
 
 def downgrade():
