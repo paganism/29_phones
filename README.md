@@ -2,7 +2,7 @@
 
 This service checks table for new phone numbers and normalizes it to "9291112233" format. In config you can set timeout between checkouts. Normalized phone numbers inserts into Orders.normalized_phone_number column.
 
-# How to run
+# How to deploy
 
 ## To export remote DB use:
 ```
@@ -36,14 +36,17 @@ sqlalchemy.url = postgresql://score:Rysherat2@localhost:5432/shop
 ```
 (.venv)$ alembic revision -m "create normalized_phone_number column in orders table"
 ```
+
+# How to run
 ## In this script you should describe your model and then use migration:
 ```
 $ alembic upgrade head
 ```
-After that you can run script:
+## And run application:
 ```
 $ python3 phone_processing.py
 ```
+
 
 # Project Goals
 
