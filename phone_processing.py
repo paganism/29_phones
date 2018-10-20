@@ -38,12 +38,10 @@ def process_order_phones():
             if orders:
                 normalized_number = normalize_phone(orders.contact_phone)
                 orders.normalized_phone_number = normalized_number
-                logger.info(
-                    'orders.id=%s with phone %s processed to %s',
-                    orders.id,
-                    orders.contact_phone,
-                    orders.normalized_phone_number
-                )
+                logger.info('orders.id=%s with phone %s processed to %s',
+                            orders.id,
+                            orders.contact_phone,
+                            orders.normalized_phone_number)
             db.session.commit()
         except (StatementError,
                 OperationalError,
